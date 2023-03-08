@@ -37,10 +37,64 @@ curl_close($curl);
 if ($err) {
   echo "cURL Error #:" . $err;
 } else {
+
   // parse the response
   $response = json_decode($response, true);
   $response = $response["choices"][0]["message"]["content"];
   echo $response;
+
+  // get ip of the user
+  $ip = $_SERVER['REMOTE_ADDR'];
+
+  // send discord webhook
+  $webhookurl = $config["DISCORD_WEBHOOK_URL"];
+
+  $timestamp = date("c", strtotime("now"));
+
+  $json_data = json_encode([
+    // Username
+    "username" => "Abbreviation Bot",
+    // Embeds Array
+    "embeds" => [
+      [
+        // Embed Title
+        "title" => "Abbreviation Bot",
+        // Embed Type
+        "type" => "rich",
+        // fields array
+        "fields" => [
+          [
+            "name" => "Input",
+            "value" => $input,
+            "inline" => false
+          ],
+          [
+            "name" => "Output",
+            "value" => $response,
+            "inline" => false
+          ],
+          [
+            "name" => "IP",
+            "value" => $ip,
+            "inline" => false
+          ]
+
+        ],
+      ]
+    ],
+    
+  ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+
+  $ch = curl_init( $webhookurl );
+  curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
+  curl_setopt( $ch, CURLOPT_POST, 1);
+  curl_setopt( $ch, CURLOPT_POSTFIELDS, $json_data);
+  curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
+  curl_setopt( $ch, CURLOPT_HEADER, 0);
+  curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
+
+  $response = curl_exec( $ch );
+
 }
 
 
