@@ -6,6 +6,7 @@
     <title>AI Tools!</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <link rel="stylesheet" type="text/css" href="https://bench.benji.link/assets/bulma-prefers-dark.css" />
+    <script async src="https://arc.io/widget.min.js#3aX7EJCn"></script>
     <!-- import custom js -->
     <script src="./index.js"></script>
   </head>
